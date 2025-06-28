@@ -1,0 +1,1075 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<!-- Declares the document as HTML5, ensuring browsers use modern standards. -->
+<html lang="en">
+<!-- Root HTML element, sets language to English for accessibility (screen readers). -->
+<head>
+  <!-- Contains metadata and resources for the page. -->
+  <meta charset="UTF-8" />
+  <!-- Sets character encoding to UTF-8 for universal text support. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Ensures responsive design by matching viewport to device width, no zoom. -->
+  <meta name="description" content="Faique Ali Khan's terminal-themed cybersecurity and digital marketing portfolio, showcasing expertise in security analysis, digital strategy, and IT operations." />
+  <!-- SEO description summarizing the portfolio’s purpose. -->
+  <meta name="keywords" content="cybersecurity analyst, digital strategist, Faique Ali Khan, terminal portfolio, ethical hacking, SEO, IT operations" />
+  <!-- SEO keywords to improve search engine ranking. -->
+  <meta name="author" content="Faique Ali Khan" />
+  <!-- Specifies the author for attribution and SEO. -->
+  <title>Terminal Portfolio | Faique Ali Khan</title>
+  <!-- Page title for browser tab and search engines. -->
+  
+  <!-- Local Tailwind CSS -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Links to minified Tailwind CSS (styles.css) for utility classes (flex, padding, etc.). -->
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Loads Font Awesome 6.5.0 CDN for potential icons (e.g., future close buttons). -->
+  
+  <style>
+    /* Internal CSS for terminal-specific styling, complementing Tailwind. */
+    body {
+      background-color: #000000;
+      /* Black background (#000000) for terminal aesthetic. */
+      color: #ffffff;
+      /* White text (#ffffff) for high contrast. */
+      font-family: 'Courier New', Courier, monospace;
+      /* Monospaced font for terminal look, with fallbacks. */
+      margin: 0;
+      /* Removes default browser margins for full control. */
+      padding: 0;
+      /* Removes default padding for full-screen layout. */
+      overflow: hidden;
+      /* Prevents body scrollbars; scrolling is handled by #terminal. */
+      height: 100vh;
+      /* Full viewport height for terminal layout. */
+      display: flex;
+      /* Flexbox for vertical stacking (terminal, input). */
+      flex-direction: column;
+      /* Stacks terminal and input vertically. */
+    }
+    #terminal {
+      flex-grow: 1;
+      /* Terminal takes remaining vertical space, pushing input to bottom. */
+      padding: 2rem;
+      /* 2rem padding for content spacing (desktop). */
+      overflow-y: auto;
+      /* Enables vertical scrolling for terminal output. */
+      font-size: 16px;
+      /* 16px font for readability (desktop). */
+      line-height: 1.6;
+      /* Line spacing for better readability. */
+      background-color: #000000;
+      /* Matches body’s black background. */
+      position: relative;
+      /* Allows absolute positioning of children (not used yet). */
+    }
+    #terminal_encrypt {
+      display: none;
+      /* Hidden by default, reserved for future encryption animations. */
+    }
+    #terminal-input {
+      background-color: #000000;
+      /* Black background for seamless input integration. */
+      color: #00ff00;
+      /* Green text (#00ff00) for classic terminal cursor. */
+      border: none;
+      /* No border for clean look. */
+      outline: none;
+      /* No focus outline for terminal aesthetic. */
+      width: 100%;
+      /* Full width of container. */
+      font-family: 'Courier New', Courier, monospace;
+      /* Matches terminal’s monospaced font. */
+      font-size: 16px;
+      /* Matches terminal font size. */
+      padding: 0.75rem 0;
+      /* Vertical padding for input height, no horizontal padding. */
+      caret-color: #00ff00;
+      /* Green cursor (#00ff00) to match text. */
+    }
+    #terminal-input:focus {
+      outline: none;
+      /* Ensures no outline on focus for aesthetic. */
+    }
+    #input-container {
+      display: flex;
+      /* Flexbox to align prompt and input horizontally. */
+      align-items: center;
+      /* Vertically centers prompt and input. */
+      padding: 0 2rem 1rem 2rem;
+      /* Padding: 0 top, 2rem left/right, 1rem bottom (desktop). */
+    }
+    .prompt {
+      color: #00ff00;
+      /* Green (#00ff00) for user@FaiqueOS:~$ prompt. */
+      margin-right: 0.5rem;
+      /* 0.5rem space between prompt and input. */
+    }
+    .escalate-prompt {
+      color: #00ff00;
+      /* Green (#00ff00) for hack game’s [Press Enter]. */
+      animation: blink 0.7s infinite alternate;
+      /* Blinking animation for cursor effect. */
+    }
+    .blink {
+      animation: blink 0.7s infinite alternate;
+      /* Reusable blinking animation class. */
+    }
+    @keyframes blink {
+      from { opacity: 1; }
+      to { opacity: 0; }
+      /* Blinking animation: fades between full/no opacity every 0.7s. */
+    }
+    .glow {
+      text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff88;
+      /* White glow effect (not used yet, reserved). */
+    }
+    .error {
+      color: #ff0000;
+      /* Red (#ff0000) for error messages. */
+    }
+    .success {
+      color: #00ffff;
+      /* Cyan (#00ffff) for success messages. */
+    }
+    .boot {
+      color: #ffff00;
+      /* Yellow (#ffff00) for boot sequence. */
+    }
+    .separator {
+      color: #808080;
+      /* Gray (#808080) for --- separators. */
+    }
+    .help-command {
+      color: #ff00ff;
+      /* Magenta (#ff00ff) for commands in help output. */
+    }
+    .hack-output {
+      color: #00ffff !important;
+      /* Cyan (#00ffff) for hack game outputs, !important for override. */
+      font-family: 'Courier New', Courier, monospace;
+      /* Monospaced font for hack outputs. */
+    }
+    .progress-bar {
+      color: #00ffff !important;
+      /* Cyan (#00ffff) for hack game progress bar. */
+      font-family: 'Courier New', Courier, monospace;
+      /* Matches terminal font. */
+    }
+    .link {
+      color: #0000ff !important;
+      /* Blue (#0000ff) for clickable links (e.g., blog). */
+      text-decoration: underline;
+      /* Underlines links for clickability. */
+      cursor: pointer;
+      /* Pointer cursor on hover. */
+    }
+    .command-input {
+      color: #00ff00;
+      /* Green (#00ff00) for user-entered commands. */
+    }
+    .command-output {
+      white-space: pre-wrap;
+      /* Preserves whitespace, wraps long lines (e.g., terminalData). */
+      margin-bottom: 1rem;
+      /* 1rem bottom margin for output separation. */
+      border-bottom: 1px solid #1a1a1a;
+      /* Dark gray border below outputs. */
+      padding-bottom: 0.5rem;
+      /* Padding above border for spacing. */
+      color: #ffffff;
+      /* White (#ffffff) for general output, overridden by specific classes. */
+    }
+    .glitch {
+      animation: glitch 1s linear infinite;
+      /* Glitch animation for distorted terminal effect. */
+    }
+    @keyframes glitch {
+      2%, 64% {
+        transform: translate(2px, 0) skew(0deg);
+      }
+      4%, 60% {
+        transform: translate(-2px, 0) skew(0deg);
+      }
+      62% {
+        transform: translate(0, 0) skew(5deg);
+      }
+      /* Glitch animation: subtle horizontal shifts and skew for flickering effect. */
+    }
+    #terminal::-webkit-scrollbar {
+      width: 10px;
+      /* 10px scrollbar width for terminal. */
+    }
+    #terminal::-webkit-scrollbar-track {
+      background: #1a1a1a;
+      /* Dark gray (#1a1a1a) scrollbar track. */
+    }
+    #terminal::-webkit-scrollbar-thumb {
+      background: #00ff00;
+      /* Green (#00ff00) scrollbar thumb. */
+      border-radius: 5px;
+      /* Rounded thumb for smoother look. */
+    }
+    #terminal::-webkit-scrollbar-thumb:hover {
+      background: #00ffff;
+      /* Cyan (#00ffff) on hover for feedback. */
+    }
+    @media (max-width: 768px) {
+      /* Responsive styles for mobile (≤768px). */
+      #terminal {
+        font-size: 14px;
+        /* 14px font for mobile readability. */
+        padding: 1.5rem;
+        /* 1.5rem padding for smaller screens. */
+      }
+      #terminal-input {
+        font-size: 14px;
+        /* Matches terminal font size. */
+      }
+      #input-container {
+        padding: 0 1.5rem 0.75rem 1.5rem;
+        /* Mobile padding: 0 top, 1.5rem left/right, 0.75rem bottom. */
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Main content container for terminal interface. -->
+  <div id="terminal" role="log" aria-live="polite"></div>
+  <!-- Terminal output area; role="log" and aria-live="polite" for screen reader updates. -->
+  <div id="input-container" class="flex items-center">
+    <!-- Flex container for prompt and input, aligned with Tailwind. -->
+    <span class="prompt" aria-hidden="true">user@FaiqueOS:~$</span>
+    <!-- Green prompt, hidden from screen readers (decorative). -->
+    <input type="text" id="terminal-input" autocomplete="off" autofocus aria-label="Terminal command input" />
+    <!-- Input field for commands, no autocomplete, auto-focused, accessible label. -->
+  </div>
+  <audio id="typeSound" src="https://cdn.pixabay.com/download/audio/2023/08/29/audio_8b5e03bebc.mp3?filename=keyboard-typing-10-165556.mp3"></audio>
+  <!-- Audio for typing sound during typewriter effect. -->
+
+  <script>
+    // JavaScript for terminal functionality, commands, and hack game.
+    // Terminal content data with improved spacing
+    const terminalData = {
+      // Stores formatted content for commands (whoami, portfolio, etc.).
+      whoami: `
+  Faique Ali Khan - Cybersecurity Analyst | Digital Strategist
+
+  My journey with computers began with Windows XP, sparking a lifelong passion that became my career. 
+  I'm an IT professional skilled in web systems, SEO, and IT operations, now pursuing a Master's in Cybersecurity. 
+  I blend academic knowledge with hands-on practice on platforms like TryHackMe and Hack The Box.
+
+  As a Cybersecurity Analyst, I specialize in protecting digital systems through:
+    - Vulnerability Assessment
+    - Ethical Hacking
+    - Incident Response
+    - Network Security
+
+  As a Digital Strategist, I boost online presence with:
+    - SEO
+    - Web Management
+    - Digital Planning
+    - Secure Solutions
+
+  Key Skills:
+    - Cybersecurity: Vulnerability Assessment, Penetration Testing, Incident Response, Threat Analysis, Network Security, Secure Coding, Risk Management, IAM
+    - Digital Strategy: SEO, Content Strategy, WordPress, Social Media Marketing, Analytics
+    - IT Operations: System Administration (Windows, Linux), Web Servers (Apache, Nginx), SQL, Network Troubleshooting, Cloud (Azure basics)
+    - Tools: TryHackMe, Hack The Box, Nmap, Wireshark, Metasploit, Burp Suite, Jira, Trello, Google Analytics, Python, Git
+      `,
+      // whoami: Bio, skills, and roles, formatted for terminal display.
+      experience: `
+  Professional Experience:
+
+    IT Manager | Fatima Public School, Hyderabad, Pakistan
+    Feb 2024 - Jun 2025
+      - Directed IT infrastructure and support
+      - Oversaw project planning and tech rollout
+      - Mentored staff on system security
+
+    WordPress Developer | TimeTechs, Hyderabad, Pakistan (Hybrid)
+    Oct 2023 - Feb 2024
+      - Customized themes and plugins
+      - Optimized performance and user experience
+      - Maintained codebase with Git
+
+    Project Head | Study Abroad Updates, Pakistan
+    Sep 2023 - Feb 2024
+      - Managed SEO, automation, and content
+      - Led educational video production
+
+    Web & SEO Manager | Times Consultant, Hyderabad, Pakistan
+    Sep 2023 - Jan 2024
+      - Executed technical SEO and analytics
+      - Used Python for automation
+
+    SEO Manager | Times Consultant, Hyderabad, Pakistan
+    May 2023 - Sep 2023
+      - Conducted keyword research
+      - Enhanced digital visibility
+
+    PHP Web Developer | The Hunar Foundation, Karachi, Pakistan
+    Feb 2019 - Mar 2019
+      - Upgraded school management system
+      - Used PHP, SQL, and Git
+
+    WordPress Developer | Times Consultant, Hyderabad, Pakistan
+    Jan 2017 - Feb 2017
+      - Customized WordPress themes
+      - Improved site performance
+
+  Volunteering Experience:
+
+    Campus Ambassador | Google Developer Student Clubs
+    Aug 2021 - Aug 2022
+      - Organized tech workshops
+      - Promoted Google technologies
+
+    Web Lead | Google Developer Student Clubs
+    Aug 2020 - Aug 2021
+      - Led web development initiatives
+      - Maintained digital presence
+      `,
+      // experience: Lists professional and volunteer roles with details.
+      education: `
+  Education:
+
+    Mehran University of Engineering and Technology
+    Master of Science - Cybersecurity
+    Feb 2025 - Feb 2027
+
+    Sindh Agricultural University
+    Bachelor's in Information Technology
+    Jan 2019 - Dec 2022 | First Division
+
+    APTECH Computer Education
+    Advanced Diploma in Software Engineering
+    Dec 2013 - Nov 2016
+      `,
+      // education: Academic qualifications with institutions and dates.
+      achievements: `
+  Certifications:
+
+    - Certified Ethical Hacker (CEH) | Cisco | Jun 2025
+    - Microsoft Specialist: Azure Infrastructure | Microsoft | Dec 2024
+    - Microsoft Certified Professional (MCP) | Microsoft | Dec 2014
+    - MCSA: Office 365 | Microsoft | Dec 2014
+    - Google Cybersecurity Certificate | Google | Jun 2025
+    - Introduction to Linux LFS101 | The Linux Foundation | Mar 2025
+    - ChatGPT for Cyber Security | Simplilearn | Mar 2025
+    - Pre-Security Certificate | TryHackMe | Jun 2025
+    - Cyber Security 101 | TryHackMe | Jun 2025
+    - Cybersecurity Management Job Simulation | ANZ (via Forage) | May 2025
+    - Cybersecurity Job Simulation | Datacom (via Forage) | May 2025
+    - Cybersecurity Job Simulation | Mastercard (via Forage) | May 2025
+    - Agile Project Management | HP | Mar 2025
+    - Social Media Marketing | HP | Mar 2025
+
+  Badges:
+    - TryHackMe Profile: https://tryhackme.com/p/faiquehere
+      `,
+      // achievements: Certifications and TryHackMe badge link.
+      projects: `
+  Projects:
+
+    Web Exploitation Portal
+      Simulated web vulnerabilities (XSS, SQL Injection, CSRF) with a login bypass challenge for penetration testing practice.
+      Tags: Web Security, Pen Testing, OWASP Top 10
+
+    Internal Network Scanner
+      Python-based tool using Nmap to scan networks, identify open ports, and alert on weak configurations.
+      Tags: Network Security, Nmap, Automation
+
+    Password Strength Meter
+      JavaScript utility with zxcvbn library for real-time password strength feedback.
+      Tags: Secure Coding, Client-Side Security, JavaScript
+      `,
+      // projects: Key projects with descriptions and tags.
+      blog: `
+  Blog Posts:
+
+    Understanding Zero-Day Exploits
+      Explores zero-day vulnerabilities and defense strategies.
+      <a href="https://faiquehere.github.io/blog/zero-day-exploits" class="link" target="_blank">Read More</a>
+
+    The Evolution of Phishing Attacks
+      Traces phishing history and advanced detection techniques.
+      <a href="https://faiquehere.github.io/blog/phishing-attacks" class="link" target="_blank">Read More</a>
+
+    Securing IoT Devices in Your Home
+      Guide to securing smart home devices from vulnerabilities.
+      <a href="https://faiquehere.github.io/blog/iot-security" class="link" target="_blank">Read More</a>
+      `,
+      // blog: Lists posts with blue (#0000ff) clickable links.
+      contact: `
+  Contact:
+
+    Email: faiquealikk@gmail.com
+    LinkedIn: https://linkedin.com/in/faiquehere
+    GitHub: https://github.com/faiquehere
+    Twitter: https://twitter.com/faiquehere
+
+    To send a message, use: sendmsg <your-name> <your-email> <message>
+    Example: sendmsg John john@example.com Hello, I'd like to connect!
+      `,
+      // contact: Contact details and sendmsg usage.
+      social: `
+  Social Media:
+
+    LinkedIn: https://linkedin.com/in/faiquehere
+    GitHub: https://github.com/faiquehere
+    Twitter: https://twitter.com/faiquehere
+    Email: faiquealikk@gmail.com
+      `,
+      // social: Social media links.
+      portfolio: `
+  Portfolio Summary - Faique Ali Khan
+
+  About:
+    Cybersecurity Analyst and Digital Strategist with expertise in web systems, SEO, and IT operations. 
+    Pursuing a Master's in Cybersecurity, with hands-on experience on TryHackMe and Hack The Box.
+
+  Experience:
+    - IT Manager, Fatima Public School (Feb 2024 - Jun 2025): Managed IT infrastructure.
+    - WordPress Developer, TimeTechs (Oct 2023 - Feb 2024): Customized themes/plugins.
+    - Project Head, Study Abroad Updates (Sep 2023 - Feb 2024): Led SEO and content.
+    - Web & SEO Manager, Times Consultant (Sep 2023 - Jan 2024): Executed SEO strategies.
+    - And more roles in SEO, PHP, and WordPress development.
+    - Volunteering: Google Developer Student Clubs (2020-2022).
+
+  Education:
+    - MS Cybersecurity, Mehran University (Feb 2025 - Feb 2027)
+    - BS Information Technology, Sindh Agricultural University (2019-2022)
+    - Advanced Diploma in Software Engineering, APTECH (2013-2016)
+
+  Achievements:
+    - Certifications: CEH (Cisco), Google Cybersecurity, Microsoft Azure, and more.
+    - Badges: TryHackMe Profile: https://tryhackme.com/p/faiquehere
+
+  Projects:
+    - Web Exploitation Portal: Simulated XSS, SQL Injection, CSRF.
+    - Internal Network Scanner: Python-based Nmap tool.
+    - Password Strength Meter: JavaScript with zxcvbn library.
+
+  Blog:
+    - Topics: Zero-Day Exploits, Phishing Attacks, IoT Security.
+
+  Contact:
+    - Email: faiquealikk@gmail.com
+    - Social: LinkedIn, GitHub, Twitter (use 'social' command)
+    - Use: sendmsg <name> <email> <message>
+    Example: sendmsg John john@example.com Hello, I'd like to connect!
+
+  For details, use: whoami, experience, education, achievements, projects, blog, contact, social
+      `
+      // portfolio: Summarizes all sections with command suggestions.
+    };
+
+    // Terminal state
+    const terminal = document.getElementById('terminal');
+    // References #terminal div for output display.
+    const input = document.getElementById('terminal-input');
+    // References #terminal-input for user input.
+    const inputContainer = document.getElementById('input-container');
+    // References #input-container (prompt + input) for visibility control.
+    const typeSound = document.getElementById('typeSound');
+    // References #typeSound audio for typing effect.
+    let commandHistory = [];
+    // Stores entered commands for history navigation.
+    let historyIndex = -1;
+    // Tracks position in commandHistory (-1 = no history selected).
+    let isTyping = false;
+    // Locks input during typewriter animation.
+    let loginState = 'username';
+    // Tracks login state: 'username' or 'loggedin'.
+    let username = '';
+    // Stores username (defaults to 'guest').
+    let typeTimeout = null;
+    // Stores typewriter timeout ID for Ctrl+C interruption.
+
+    // Hack game state
+    let hackState = {
+      // Manages hack game state.
+      active: false,
+      // Indicates if hack game is running.
+      stage: 'selectTarget',
+      // Current stage: selectTarget, scan, exploit, escalate.
+      target: null,
+      // Selected target (e.g., Corporate Server).
+      progress: 0,
+      // Progress percentage (0, 40, 80, 100).
+      output: [],
+      // Reserved for future hack output storage.
+      escalatePrompt: false
+      // Shows [Press Enter], hides input in escalate stage.
+    };
+
+    // Dynamic boot sequence messages
+    const bootMessages = [
+      'Initializing FaiqueOS v1.0.0...',
+      '[OK] Mounting filesystem...',
+      '[OK] Starting network services...',
+      '[OK] Loading cybersecurity modules...',
+      '[OK] Scanning for vulnerabilities...',
+      '[OK] Establishing secure connection...',
+      '[OK] Booting kernel...',
+      '[OK] System ready.'
+    ];
+    // Randomized boot messages for startup effect.
+
+    // Boot sequence
+    const bootSequence = [
+      'Welcome to FaiqueOS v1.0.0 - Cybersecurity Terminal',
+      ...bootMessages.sort(() => Math.random() - 0.5).slice(0, 5),
+      'Please enter username: '
+    ];
+    // Combines welcome, 5 random boot messages, and username prompt.
+
+    // Command definitions with descriptions
+    const commands = {
+      // Defines all commands with descriptions and execute functions.
+      help: {
+        description: 'List all available commands with descriptions',
+        execute: () => {
+          return `
+  Available Commands:
+  ------------------
+  <span class="help-command">whoami</span>        Display information about Faique Ali Khan
+  <span class="help-command">experience</span>    Show professional and volunteering experience
+  <span class="help-command">education</span>     List educational background
+  <span class="help-command">achievements</span>  Display certifications and badges
+  <span class="help-command">projects</span>      Show key projects
+  <span class="help-command">blog</span>          List blog posts
+  <span class="help-command">contact</span>       Show contact information
+  <span class="help-command">social</span>        Display social media links
+  <span class="help-command">sendmsg</span>       Send a message (usage: sendmsg <name> <email> <message>, e.g., sendmsg John john@example.com Hello!)
+  <span class="help-command">resume</span>        Open resume in a new tab
+  <span class="help-command">portfolio</span>     Show a summary of the portfolio
+  <span class="help-command">history</span>       Display command history
+  <span class="help-command">hack</span>          Start an interactive hacking simulation game
+  <span class="help-command">clear</span>         Clear the terminal screen
+  <span class="help-command">ls</span>            List sections or view a specific section (usage: ls <section>)
+  <span class="help-command">shutdown</span>      Restart the terminal
+  ------------------
+          `;
+        }
+      },
+      whoami: {
+        description: 'Display information about Faique Ali Khan',
+        execute: () => terminalData.whoami
+      },
+      experience: {
+        description: 'Show professional and volunteering experience',
+        execute: () => terminalData.experience
+      },
+      education: {
+        description: 'List educational background',
+        execute: () => terminalData.education
+      },
+      achievements: {
+        description: 'Display certifications and badges',
+        execute: () => terminalData.achievements
+      },
+      projects: {
+        description: 'Show key projects',
+        execute: () => terminalData.projects
+      },
+      blog: {
+        description: 'List blog posts',
+        execute: () => terminalData.blog
+      },
+      contact: {
+        description: 'Show contact information',
+        execute: () => terminalData.contact
+      },
+      social: {
+        description: 'Display social media links',
+        execute: () => terminalData.social
+      },
+      resume: {
+        description: 'Open resume in a new tab',
+        execute: () => {
+          return 'Opening resume at http://tiny.cc/faiquehere...';
+          // Returns message for typewriter; link opens in processCommand after typewriter.
+        }
+      },
+      portfolio: {
+        description: 'Show a summary of the portfolio',
+        execute: () => terminalData.portfolio
+      },
+      history: {
+        description: 'Display command history',
+        execute: () => {
+          if (commandHistory.length === 0) {
+            return 'No commands in history.';
+          }
+          return commandHistory.map((cmd, index) => `${(index + 1).toString().padStart(2, ' ')}. ${cmd}`).join('\n');
+        }
+      },
+      hack: {
+        description: 'Start an interactive hacking simulation game',
+        execute: () => {
+          hackState = {
+            active: true,
+            stage: 'selectTarget',
+            target: null,
+            progress: 0,
+            output: [],
+            escalatePrompt: false
+          };
+          return [
+            '<span class="hack-output">Initiating Hack Simulation...</span>',
+            `<span class="hack-output">Welcome, ${username}. You're tasked with infiltrating a target system to expose vulnerabilities.</span>`,
+            '<span class="hack-output">Select a target:</span>',
+            '<span class="hack-output">1: Corporate Server (High-security, data breach potential)</span>',
+            '<span class="hack-output">2: IoT Device (Weak firmware, remote access risk)</span>',
+            '<span class="hack-output">3: Dark Web Vault (Encrypted, high-value data)</span>',
+            '<span class="hack-output">Enter 1, 2, or 3 to proceed:</span>'
+          ].join('\n');
+        }
+      },
+      clear: {
+        description: 'Clear the terminal screen',
+        execute: () => {
+          hackState.active = false;
+          hackState.escalatePrompt = false;
+          inputContainer.style.display = 'flex';
+          terminal.innerHTML = '';
+          input.focus();
+          return '';
+        }
+      },
+      ls: {
+        description: 'List sections or view a specific section (usage: ls <section>)',
+        execute: (args) => {
+          if (args.length === 0) {
+            return 'dir: whoami experience education achievements projects blog contact social portfolio';
+          } else if (terminalData[args[0]]) {
+            return terminalData[args[0]];
+          } else {
+            return `ls: cannot access '${args[0]}': No such section`;
+          }
+        }
+      },
+      sendmsg: {
+        description: 'Send a message (usage: sendmsg <name> <email> <message>, e.g., sendmsg John john@example.com Hello!)',
+        execute: async (args) => {
+          const usage = `
+<span class="error">Usage: sendmsg <name> <email> <message>
+Example: sendmsg John john@example.com Hello, I'd like to connect!
+- Name: Your name (letters and spaces only)
+- Email: Your valid email address (e.g., user@example.com)
+- Message: Your message (minimum 1 character)</span>`;
+          if (args.length < 3) {
+            return usage;
+          }
+          const name = args[0].trim();
+          const email = args[1].trim();
+          const message = args.slice(2).join(' ').trim();
+          if (!name || !/^[a-zA-Z\s]+$/.test(name)) {
+            return `<span class="error">Error: Name must contain only letters and spaces</span>\n${usage}`;
+          }
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return `<span class="error">Error: Invalid email format</span>\n${usage}`;
+          }
+          if (!message) {
+            return `<span class="error">Error: Message cannot be empty</span>\n${usage}`;
+          }
+          try {
+            const response = await fetch('https://formspree.io/f/mldnapqj', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({ name, email, message })
+            });
+            if (response.ok) {
+              return '<span class="success">Message sent successfully!</span>';
+            } else {
+              const errorData = await response.json().catch(() => ({}));
+              console.error('Formspree error:', errorData);
+              return `<span class="error">Error sending message: ${errorData.error || response.statusText}</span>\n${usage}`;
+            }
+          } catch (error) {
+            console.error('Network error:', error);
+            return `<span class="error">Error sending message: Network error. Please check your connection or Formspree endpoint.</span>\n${usage}`;
+          }
+        }
+      },
+      shutdown: {
+        description: 'Restart the terminal',
+        execute: () => {
+          hackState.active = false;
+          hackState.escalatePrompt = false;
+          inputContainer.style.display = 'flex';
+          terminal.innerHTML = '';
+          loginState = 'username';
+          runBootSequence();
+          return 'Shutting down...';
+        }
+      }
+    };
+
+    // Command autocomplete suggestions
+    const commandList = Object.keys(commands);
+    // Array of command names for Tab autocomplete.
+    function suggestCommand(input) {
+      return commandList.filter(cmd => cmd.startsWith(input.toLowerCase()));
+      // Returns commands starting with input (case-insensitive).
+    }
+
+    // Progress bar generator
+    function generateProgressBar(progress) {
+      const total = 10;
+      const filled = Math.round((progress / 100) * total);
+      const empty = total - filled;
+      return `<span class="progress-bar">[${'='.repeat(filled)}>${' '.repeat(empty)}] ${progress}%</span>`;
+      // Creates cyan progress bar (e.g., [======>   ] 70%).
+    }
+
+    // Handle hack game logic
+    function handleHackInput(input) {
+      if (!hackState.active) return null;
+      let output = [];
+      hackState.escalatePrompt = false;
+      inputContainer.style.display = 'flex';
+      input.focus();
+      if (hackState.stage === 'selectTarget') {
+        if (['1', '2', '3'].includes(input)) {
+          hackState.target = input === '1' ? 'Corporate Server' : input === '2' ? 'IoT Device' : 'Dark Web Vault';
+          hackState.stage = 'scan';
+          hackState.progress = 0;
+          output = [
+            `<span class="hack-output">Target selected: ${hackState.target}</span>`,
+            '<span class="hack-output">Stage 1: Scanning for vulnerabilities...</span>',
+            '<span class="hack-output">Choose a scanning tool: nmap, netcat, skip</span>'
+          ];
+        } else {
+          output = ['<span class="hack-output">Invalid target. Enter 1, 2, or 3:</span>'];
+        }
+      } else if (hackState.stage === 'scan') {
+        if (input.toLowerCase() === 'skip') {
+          hackState.active = false;
+          output = ['<span class="hack-output">[FAILURE] Operation aborted. Scan skipped.</span>'];
+        } else if (['nmap', 'netcat'].includes(input.toLowerCase())) {
+          hackState.progress = 40;
+          hackState.stage = 'exploit';
+          const event = Math.random() < 0.2 ? '<span class="hack-output">Firewall detected! Increased difficulty.</span>' : '';
+          output = [
+            `<span class="hack-output">Scanning with ${input.toLowerCase()}...</span>`,
+            generateProgressBar(hackState.progress),
+            event,
+            '<span class="hack-output">Stage 2: Exploiting vulnerabilities...</span>',
+            '<span class="hack-output">Choose an exploit tool: metasploit, sqlmap, skip</span>'
+          ].filter(line => line);
+        } else {
+          output = ['<span class="hack-output">Invalid tool. Choose: nmap, netcat, skip</span>'];
+        }
+      } else if (hackState.stage === 'exploit') {
+        if (input.toLowerCase() === 'skip') {
+          hackState.active = false;
+          output = ['<span class="hack-output">[FAILURE] Operation aborted. Exploit skipped.</span>'];
+        } else if (['metasploit', 'sqlmap'].includes(input.toLowerCase())) {
+          hackState.progress = 80;
+          hackState.stage = 'escalate';
+          hackState.escalatePrompt = true;
+          const event = Math.random() < 0.2 ? '<span class="hack-output">IDS alert triggered! Proceed with caution.</span>' : '';
+          output = [
+            `<span class="hack-output">Exploiting with ${input.toLowerCase()}...</span>`,
+            generateProgressBar(hackState.progress),
+            event,
+            '<span class="hack-output">Stage 3: Escalating privileges...</span>',
+            '<span class="escalate-prompt">[Press Enter]</span>'
+          ].filter(line => line);
+        } else {
+          output = ['<span class="hack-output">Invalid tool. Choose: metasploit, sqlmap, skip</span>'];
+        }
+      } else if (hackState.stage === 'escalate') {
+        hackState.progress = 100;
+        hackState.active = false;
+        hackState.escalatePrompt = false;
+        inputContainer.style.display = 'flex';
+        const success = Math.random() < 0.8;
+        output = [
+          '<span class="hack-output">Attempting privilege escalation...</span>',
+          generateProgressBar(hackState.progress),
+          `<span class="hack-output">${success ? '[SUCCESS] Access granted! You’ve exposed vulnerabilities in ' + hackState.target + '!' : '[FAILURE] Intrusion detected! Connection terminated.'}</span>`
+        ];
+      }
+      return output.join('\n');
+    }
+
+    // Typewriter effect with HTML parsing
+    function typeText(text, callback) {
+      if (!text) {
+        if (hackState.escalatePrompt) {
+          inputContainer.style.display = 'none';
+        }
+        callback();
+        return;
+      }
+      isTyping = true;
+      const div = document.createElement('div');
+      div.className = 'command-output glitch';
+      terminal.appendChild(div);
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = text;
+      const nodes = Array.from(tempDiv.childNodes);
+      let nodeIndex = 0;
+      let charIndex = 0;
+      let currentText = '';
+      function type() {
+        if (!isTyping) {
+          div.innerHTML += '^C';
+          terminal.scrollTop = terminal.scrollHeight;
+          hackState.active = false;
+          hackState.escalatePrompt = false;
+          inputContainer.style.display = 'flex';
+          input.focus();
+          callback();
+          return;
+        }
+        if (nodeIndex < nodes.length) {
+          const node = nodes[nodeIndex];
+          if (node.nodeType === Node.TEXT_NODE) {
+            if (charIndex < node.textContent.length) {
+              currentText += node.textContent[charIndex];
+              div.innerHTML = currentText;
+              typeSound.currentTime = 0;
+              typeSound.play().catch(() => {});
+              charIndex++;
+              terminal.scrollTop = terminal.scrollHeight;
+              typeTimeout = setTimeout(type, 5);
+            } else {
+              charIndex = 0;
+              nodeIndex++;
+              typeTimeout = setTimeout(type, 5);
+            }
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            currentText += node.outerHTML;
+            div.innerHTML = currentText;
+            nodeIndex++;
+            terminal.scrollTop = terminal.scrollHeight;
+            typeTimeout = setTimeout(type, 5);
+          } else {
+            nodeIndex++;
+            typeTimeout = setTimeout(type, 5);
+          }
+        } else {
+          isTyping = false;
+          if (hackState.escalatePrompt) {
+            inputContainer.style.display = 'none';
+          }
+          callback();
+        }
+      }
+      type();
+    }
+
+    // Append output to terminal with separator
+    function appendOutput(text, className = '') {
+      const div = document.createElement('div');
+      div.innerHTML = text;
+      div.className = `command-output ${className} glitch`;
+      terminal.appendChild(div);
+      const separator = document.createElement('div');
+      separator.textContent = '---';
+      separator.className = 'command-output separator';
+      terminal.appendChild(separator);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    // Process command
+    function processCommand(cmd) {
+      if (cmd.trim() === '' && hackState.active && hackState.stage === 'escalate') {
+        commandHistory.push(cmd);
+        historyIndex = commandHistory.length;
+        const hackOutput = handleHackInput(cmd);
+        if (hackOutput) {
+          typeText(hackOutput, () => {
+            inputContainer.style.display = 'flex';
+            input.focus();
+          });
+        }
+        return;
+      }
+      if (!cmd.trim()) {
+        input.focus();
+        return;
+      }
+      commandHistory.push(cmd);
+      historyIndex = commandHistory.length;
+      appendOutput(`user@FaiqueOS:~$ ${cmd}`, 'command-input');
+      if (hackState.active) {
+        const hackOutput = handleHackInput(cmd);
+        if (hackOutput) {
+          typeText(hackOutput, () => {
+            if (hackState.escalatePrompt) {
+              inputContainer.style.display = 'none';
+            } else {
+              inputContainer.style.display = 'flex';
+              input.focus();
+            }
+          });
+        }
+      } else if (commands[cmd.split(' ')[0]]) {
+        const [command, ...args] = cmd.split(' ');
+        const executeCommand = async () => {
+          const output = await commands[command].execute(args);
+          if (output) {
+            typeText(output, () => {
+              inputContainer.style.display = 'flex';
+              input.focus();
+              if (command === 'resume') {
+                window.open('http://tiny.cc/faiquehere', '_blank');
+                // Opens resume link after typewriter completes.
+              }
+            });
+          } else {
+            inputContainer.style.display = 'flex';
+            input.focus();
+          }
+        };
+        executeCommand();
+      } else {
+        const suggestions = suggestCommand(cmd.split(' ')[0]);
+        const output = suggestions.length > 0
+          ? `bash: ${cmd.split(' ')[0]}: command not found. Did you mean: ${suggestions.join(', ')}?`
+          : `bash: ${cmd.split(' ')[0]}: command not found`;
+        appendOutput(output, 'error');
+        inputContainer.style.display = 'flex';
+        input.focus();
+      }
+    }
+
+    // Handle boot sequence
+    function runBootSequence(index = 0) {
+      if (index < bootSequence.length) {
+        const className = index < bootSequence.length - 1 ? 'boot' : '';
+        appendOutput(bootSequence[index], className);
+        setTimeout(() => runBootSequence(index + 1), 300);
+      } else {
+        inputContainer.style.display = 'flex';
+        input.focus();
+      }
+    }
+
+    // Input handler for terminal input
+    input.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'c' && isTyping && loginState === 'loggedin') {
+        isTyping = false;
+        clearTimeout(typeTimeout);
+        appendOutput('^C', 'error');
+        hackState.active = false;
+        hackState.escalatePrompt = false;
+        inputContainer.style.display = 'flex';
+        input.focus();
+        e.preventDefault();
+        return;
+      }
+      if (isTyping) return;
+      if (e.key === 'Enter') {
+        const value = input.value;
+        input.value = '';
+        if (loginState === 'username') {
+          username = value || 'guest';
+          terminal.innerHTML = ''; // Clears terminal screen after username entry
+          appendOutput(`[OK] Logged in as ${username}\nType 'help' for available commands.`, 'success');
+          loginState = 'loggedin';
+          inputContainer.style.display = 'flex';
+          input.focus();
+        } else if (loginState === 'loggedin') {
+          processCommand(value);
+        }
+      } else if (e.key === 'ArrowUp' && loginState === 'loggedin') {
+        if (historyIndex > 0) {
+          historyIndex--;
+          input.value = commandHistory[historyIndex] || '';
+          input.focus();
+        }
+        e.preventDefault();
+      } else if (e.key === 'ArrowDown' && loginState === 'loggedin') {
+        if (historyIndex < commandHistory.length - 1) {
+          historyIndex++;
+          input.value = commandHistory[historyIndex];
+        } else {
+          historyIndex = commandHistory.length;
+          input.value = '';
+        }
+        input.focus();
+        e.preventDefault();
+      } else if (e.key === 'Tab' && loginState === 'loggedin' && !hackState.active) {
+        e.preventDefault();
+        const value = input.value.trim();
+        const suggestions = suggestCommand(value);
+        if (suggestions.length === 1) {
+          input.value = suggestions[0];
+        }
+        input.focus();
+      }
+    });
+
+    // Global keydown handler for escalate stage
+    document.addEventListener('keydown', (e) => {
+      if (hackState.escalatePrompt && e.key === 'Enter' && loginState === 'loggedin' && !isTyping) {
+        e.preventDefault();
+        processCommand('');
+      } else if (hackState.escalatePrompt && e.ctrlKey && e.key === 'c' && loginState === 'loggedin') {
+        isTyping = false;
+        clearTimeout(typeTimeout);
+        appendOutput('^C', 'error');
+        hackState.active = false;
+        hackState.escalatePrompt = false;
+        inputContainer.style.display = 'flex';
+        input.focus();
+        e.preventDefault();
+      }
+    });
+
+    // Initialize terminal
+    document.addEventListener('DOMContentLoaded', () => {
+      runBootSequence();
+    });
+  </script>
+</body>
+</html>
+```

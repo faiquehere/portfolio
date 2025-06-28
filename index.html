@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Character set for the document -->
+  <meta charset="UTF-8" />
+  <!-- Viewport meta tag for responsive design, ensuring proper scaling on all devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Meta description for SEO, providing a concise summary of the page content -->
+  <meta name="description" content="Faique Ali Khan's cybersecurity and digital marketing portfolio, showcasing expertise in security analysis, digital strategy, ethical hacking, SEO, and IT operations. Explore projects, certifications, and hands-on experience." />
+  <!-- Keywords for SEO, though less impactful now, still good practice -->
+  <meta name="keywords" content="cybersecurity analyst, digital strategist, Faique Ali Khan, portfolio, IT operations, web systems, SEO, ethical hacking, incident response, network security, TryHackMe, CEH, Google Cybersecurity Certificate" />
+  <!-- Author of the document -->
+  <meta name="author" content="Faique Ali Khan" />
+  <!-- Title of the webpage, displayed in the browser tab -->
+  <title>Cybersecurity Analyst | Digital Strategist | Faique Ali Khan</title>
+  
+  <!-- Link to Tailwind CSS CDN for utility-first styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Link to Particles.js CDN for interactive background animations -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <!-- Link to Font Awesome CDN for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+  <!-- Custom CSS styles for the portfolio, enhancing Tailwind defaults -->
+  <style>
+    /* Ensures smooth scrolling behavior when navigating to anchored sections */
+    html { scroll-behavior: smooth; }
+    /* Sets the overall dark background, neon green text, and Inter font for the body */
+    body {
+      background-color: #0d0d0d; /* Even darker background */
+      color: #00f5a0; /* Neon green text */
+      font-family: 'Inter', sans-serif; /* Using Inter font as per instructions */
+    }
+    /* General glow effect applied to sections and interactive elements for a futuristic look */
+    .glow-border {
+      border: 2px solid #00f5a0;
+      box-shadow: 0 0 15px #00f5a088, inset 0 0 5px #00f5a044; /* Added inset shadow */
+      transition: all 0.3s ease-in-out;
+    }
+    /* Hover effect for elements with cyber-glow class, providing visual feedback */
+    .cyber-glow:hover {
+      box-shadow: 0 0 20px #00f5a0cc, inset 0 0 10px #00f5a066; /* More intense glow on hover */
+      transform: translateY(-5px) scale(1.02); /* Slight lift and scale */
+      border-color: #38bdf8; /* Change border color on hover */
+    }
+    /* Typing animation for the role text in the header */
+    .typing::after {
+      content: "|"; /* Cursor effect */
+      animation: blink 0.7s infinite alternate; /* Blinking animation */
+    }
+    /* Keyframes for the blinking animation */
+    @keyframes blink {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    /* Styling for navigation links */
+    .nav-link {
+      padding: 0.75rem 1.5rem; /* Larger padding */
+      transition: all 0.3s ease-in-out;
+      border-radius: 9999px; /* Pill shape */
+      border: 1px solid transparent; /* Subtle border */
+      font-weight: 600;
+      text-transform: uppercase; /* Uppercase for nav links */
+      letter-spacing: 0.05em;
+    }
+    /* Hover effect for navigation links */
+    .nav-link:hover {
+      background-color: #00f5a0;
+      color: #0d0d0d; /* Dark text on hover */
+      border-color: #00f5a0; /* Border matches background on hover */
+      transform: scale(1.05); /* Slight scale on hover */
+      box-shadow: 0 0 8px #00f5a088;
+    }
+    /* Responsive adjustment for iframe height on smaller screens */
+    @media (max-width: 768px) {
+      iframe {
+        height: auto;
+      }
+    }
+    /* Styles for mobile menu when it's open, overriding hidden on small screens */
+    .mobile-menu-open {
+      display: flex; /* Override hidden for mobile when open */
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+    /* Styling for certification links, making the entire div clickable */
+    .cert-link {
+        display: block; /* Make the whole div clickable */
+        text-decoration: none; /* Remove underline by default */
+        color: inherit; /* Inherit text color */
+    }
+    /* Hover effects for certification titles and dates */
+    .cert-link:hover .cert-title {
+        color: #38bdf8; /* Change title color on hover */
+    }
+    .cert-link:hover .cert-date {
+        color: #00f5a0; /* Change date color on hover */
+    }
+    /* Styling for skill category headings */
+    .skill-category {
+      font-size: 1.75rem; /* 28px */
+      font-weight: 700; /* Extra bold */
+      color: #38bdf8; /* Blue for category headings */
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px dotted #00f5a066; /* Dotted neon green line */
+    }
+    /* Styling for individual skill tags */
+    .skill-tag {
+        background-color: #00f5a0; /* Neon green background */
+        color: #0d0d0d; /* Dark text */
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 600; /* font-semibold */
+        padding: 0.5rem 1rem; /* py-2 px-4 */
+        border-radius: 9999px; /* rounded-full */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* subtle shadow */
+        transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    }
+    /* Hover effect for skill tags */
+    .skill-tag:hover {
+        transform: translateY(-2px);
+        background-color: #38bdf8; /* Blue on hover */
+        color: #ffffff; /* White text on hover */
+    }
+  </style>
+</head>
+<body>
+<!-- Particles.js background for visual effect, fixed position, and low z-index -->
+<div id="particles-js" class="fixed top-0 left-0 w-full h-full -z-10"></div>
+
+<!-- Header Section: Contains the main title, dynamic role text, and navigation -->
+<header class="text-center py-12 px-4 bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d] shadow-2xl relative z-10">
+  <!-- Main title with a light pulse animation -->
+  <h1 class="text-6xl font-extrabold text-white tracking-wider animate-pulse-light">Faique Ali Khan</h1>
+  <!-- Dynamic role text with a typing animation, controlled by JavaScript -->
+  <p class="text-3xl mt-4 typing text-[#38bdf8] font-mono" id="role"></p>
+  
+  <!-- Navigation Menu -->
+  <nav class="mt-10">
+    <!-- Mobile menu toggle button, visible only on large screens -->
+    <div class="flex justify-center lg:hidden">
+      <button id="menu-toggle" class="text-[#00f5a0] text-3xl focus:outline-none">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <!-- Navigation links and action buttons. Hidden by default on mobile, shown as flex on large screens.
+         JavaScript handles mobile menu opening/closing. -->
+    <div id="nav-links" class="hidden lg:flex justify-center gap-5 flex-wrap transition-all duration-300 ease-in-out">
+      <!-- Individual navigation links, ordered for standard portfolio flow -->
+      <a href="#" class="nav-link text-white">Home</a>
+      <a href="#about" class="nav-link text-white">About</a>
+      <a href="#experience" class="nav-link text-white">Experience</a>
+      <a href="#education" class="nav-link text-white">Education</a>
+      <a href="#achievements" class="nav-link text-white">Achievements</a> <!-- Consolidated Badges & Certs -->
+      <a href="#projects" class="nav-link text-white">Projects</a>
+      <a href="#blog" class="nav-link text-white">Blog</a>
+      <a href="#contact" class="nav-link text-white">Contact</a>
+      <!-- Grouping buttons for alignment and consistent spacing -->
+      <div class="flex gap-4 mt-4 lg:mt-0">
+        <!-- "Terminal Website" button -->
+        <a href="terminal.html" target="_blank" class="bg-[#38bdf8] text-white font-extrabold px-5 py-2 rounded-full hover:bg-blue-600 hover:text-white transition transform hover:scale-105 shadow-lg flex items-center justify-center text-sm">
+          Terminal <i class="fas fa-terminal ml-2"></i>
+        </a>
+        <!-- "Download Resume" button -->
+        <a href="https://www.tiny.cc/faiquehere" target="_blank" class="bg-[#00f5a0] text-black font-extrabold px-5 py-2 rounded-full hover:bg-[#38bdf8] hover:text-white transition transform hover:scale-110 shadow-lg flex items-center justify-center text-sm">
+          Resume <i class="fas fa-download ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Main content area, centered and with padding -->
+<main class="container mx-auto px-6 py-8">
+
+<!-- About Me Section: Provides a personal introduction and highlights key skills -->
+<section id="about" class="max-w-5xl mx-auto px-8 py-10 glow-border rounded-xl mb-12 bg-[#1c1c1c] shadow-2xl">
+  <!-- Section heading with an icon -->
+  <h2 class="text-4xl font-bold border-b-4 border-[#00f5a0] pb-4 mb-8 text-white"><i class="fas fa-user-secret mr-4"></i> About Me</h2>
+  <!-- Paragraphs detailing personal journey and professional focus -->
+  <p class="mt-4 text-xl leading-relaxed text-gray-300">
+    My journey with computers began way back with <strong>Windows XP</strong>, sparking a lifelong interest that turned into my career. I grew into an <strong>IT professional</strong>, skilled in web systems, online search strategies (SEO), and general IT work. Now, I'm taking that knowledge into <strong>cybersecurity</strong>, currently working on my <strong>Master's degree</strong>. I make sure to connect what I learn in school with real-world practice.
+  </p>
+  <p class="mt-4 text-xl leading-relaxed text-gray-300">
+    As a <strong>Cybersecurity Analyst</strong>, I focus on protecting digital systems. My hands-on experience in labs like <strong>TryHackMe and Hack The Box</strong> has taught me to <strong>keep networks safe, find weaknesses, perform ethical hacking, and respond quickly to security problems</strong>. I understand how to spot threats, defend against attacks, and make sure systems are secure from the ground up.
+  </p>
+  <p class="mt-4 text-xl leading-relaxed text-gray-300">
+    As a <strong>Digital Strategist</strong>, I use my tech skills to help online presences grow and succeed. I understand how to boost visibility through <strong>SEO</strong>, manage web systems, and create effective digital plans. My goal is to combine this ability to grow online reach with strong security, making sure that digital efforts are not just successful but also safe from cyber threats. I am passionate about building secure, flexible, and new solutions that protect our connected world.
+  </p>
+  
+  <!-- Heading for skills section -->
+  <h3 class="text-3xl font-bold text-[#00f5a0] mb-4 mt-8">🛠️ Key Skills & Tools:</h3>
+  <!-- Container for skill categories -->
+  <div class="flex flex-col gap-6">
+
+    <!-- Cybersecurity Core Skills Category -->
+    <div>
+      <h4 class="skill-category"><i class="fas fa-shield-alt mr-2"></i> Cybersecurity Core</h4>
+      <div class="flex flex-wrap gap-3 mt-3">
+        <span class="skill-tag">Vulnerability Assessment & Management</span>
+        <span class="skill-tag">Penetration Testing (Ethical Hacking)</span>
+        <span class="skill-tag">Incident Response & Digital Forensics</span>
+        <span class="skill-tag">Threat Analysis & Intelligence</span>
+        <span class="skill-tag">Network Security & Defense</span>
+        <span class="skill-tag">Security Architecture Design</span>
+        <span class="skill-tag">Secure Coding Practices</span>
+        <span class="skill-tag">Risk Management</span>
+        <span class="skill-tag">Identity and Access Management (IAM)</span>
+      </div>
+    </div>
+
+    <!-- Digital Strategy & Marketing Skills Category -->
+    <div>
+      <h4 class="skill-category"><i class="fas fa-chart-line mr-2"></i> Digital Strategy & Marketing</h4>
+      <div class="flex flex-wrap gap-3 mt-3">
+        <span class="skill-tag">SEO (Search Engine Optimization)</span>
+        <span class="skill-tag">Content Strategy & Development</span>
+        <span class="skill-tag">WordPress Management & Development</span>
+        <span class="skill-tag">Social Media Marketing</span>
+        <span class="skill-tag">Digital Analytics & Reporting</span>
+        <span class="skill-tag">Personal Branding & Online Visibility</span>
+      </div>
+    </div>
+
+    <!-- IT Operations & Systems Skills Category -->
+    <div>
+      <h4 class="skill-category"><i class="fas fa-server mr-2"></i> IT Operations & Systems</h4>
+      <div class="flex flex-wrap gap-3 mt-3">
+        <span class="skill-tag">System Administration (Windows, Linux)</span>
+        <span class="skill-tag">Web Server Management (Apache, Nginx)</span>
+        <span class="skill-tag">Database Management (SQL)</span>
+        <span class="skill-tag">Network Configuration & Troubleshooting</span>
+        <span class="skill-tag">IT Infrastructure Management</span>
+        <span class="skill-tag">Cloud Platforms (Azure basics)</span>
+      </div>
+    </div>
+
+    <!-- Tools & Platforms Category -->
+    <div>
+      <h4 class="skill-category"><i class="fas fa-tools mr-2"></i> Tools & Platforms</h4>
+      <div class="flex flex-wrap gap-3 mt-3">
+        <span class="skill-tag">TryHackMe & Hack The Box</span>
+        <span class="skill-tag">Nmap</span>
+        <span class="skill-tag">Wireshark</span>
+        <span class="skill-tag">Metasploit</span>
+        <span class="skill-tag">Burp Suite (basics)</span>
+        <span class="skill-tag">Jira & Trello</span>
+        <span class="skill-tag">Google Analytics & Search Console</span>
+        <span class="skill-tag">Python (Scripting)</span>
+        <span class="skill-tag">Git & GitHub</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Experience Section: Details professional and volunteering history -->
+<section id="experience" class="max-w-5xl mx-auto px-8 py-10 glow-border rounded-xl mb-12 bg-[#1c1c1c] shadow-2xl">
+  <h2 class="text-4xl font-bold border-b-4 border-[#00f5a0] pb-4 mb-8 text-white"><i class="fas fa-briefcase mr-4"></i> Experience</h2>
+  
+  <h3 class="text-3xl font-bold text-[#00f5a0] mb-6 mt-8">💼 Professional Experience</h3>
+
+  <div class="space-y-8">
+    <!-- Individual professional experience entries -->
+    <div class="experience-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h4 class="text-2xl font-bold text-white">IT Manager <span class="text-gray-400">— Fatima Public School</span></h4>
+      <p class="text-xl text-gray-400 mt-1 mb-4">📍 Hyderabad, Sindh, Pakistan | 🗓️ Feb 2024 – Jun 2025 (1 yr 5 mos)</p>
+      <ul class="list-disc list-inside mt-4 text-gray-300 text-lg leading-relaxed">
+        <li class="mb-2">Directed IT infrastructure, implementation, and support across the institution.</li>
+        <li class="mb-2">Oversaw project planning, user training, and educational technology rollout.</li>
+        <li>Mentored staff and administered system security and hardware/software management.</li>
+      </ul>
+    </div>
+
+    <div class="experience-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h4 class="text-2xl font-bold text-white">WordPress Developer <span class="text-gray-400">— TimeTechs</span></h4>
+      <p class="text-xl text-gray-400 mt-1 mb-4">📍 Hyderabad, Sindh, Pakistan (Hybrid) | 🗓️ Oct 2023 – Feb 2024 (5 mos)</p>
+      <ul class="list-disc list-inside mt-4 text-gray-300 text-lg leading-relaxed">
+        <li class="mb-2">Customized themes and plugins to meet client specifications.</li>
+        <li class="mb-2">Conducted debugging and performance optimization.</li>
+        <li>Maintained codebase using Git and enhanced front-end user experience.</li>
+      </ul>
+    </div>
+
+    <div class="experience-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h4 class="text-2xl font-bold text-white">Project Head <span class="text-gray-400">— Study Abroad Updates</span></h4>
+      <p class="text-xl text-gray-400 mt-1 mb-4">📍 Pakistan (On-site) | 🗓️ Sep 2023 – Feb 2024 (6 mos)</p>
+      <ul class="list-disc list-inside mt-4 text-gray-300 text-lg leading-relaxed">
+        <li class="mb-2">Managed SEO strategy, automation tools, web content, and social media channels.</li>
+        <li class="mb-2">Spearheaded production of educational video content and analytics tracking.</li>
+      </ul>
+    </div>
+
+    <div class="experience-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h4 class="text-2xl font-bold text-white">Web & SEO Manager <span class="text-gray-400">— Times Consultant (Pvt.) Ltd.</span></h4>
+      <p class="text-xl text-gray-400 mt-1 mb-4">📍 Hyderabad, Sindh, Pakistan | 🗓️ Sep 2023 – Jan 2024 (5 mos)</p>
+      <ul class="list-disc list-inside mt-4 text-gray-300 text-lg leading-relaxed">
+        <li class="mb-2">Executed technical SEO practices and performance analysis.</li>
+        <li class="mb-2">Utilized Python and Git for content automation and marketing enhancements.</li>
+        <li>Managed on-page optimization and targeted social media outreach.</li>
+      </ul>
+    </div>
+
+    <div class="experience-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h4 class="text-2xl font-bold text-white">SEO Manager <span class="text-gray-400">— Times Consultant (Pvt.) Ltd.</span></h4>
+      <p class="text-xl text-gray-400 mt-1 mb-4">🗓️ May 2023 – Sep 2023 (5 mos)</p>
+      <ul class="list-disc list-inside mt-4 text-gray-300 text-lg leading-relaxed">
+        <li class="mb-2">Conducted keyword research and developed ranking strategies.</li>
+        <li class="mb-2">Collaborated with content writers and monitored analytics tools.</li>
+        <li>Enhanced visibility across multiple digital platforms.</li>
+      </ul>
+    </div>
+
+    <div class="experience-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h4 class="text-2xl font-bold text-white">PHP Web Developer <span class="text-gray-400">— The Hunar Foundation (THF)</span></h4>
+      <p class="text-xl text-gray-400 mt-1 mb-4">📍 Karachi, Sindh, Pakistan | 🗓️ Feb 2019 – Mar 2019 (2 mos)</p>
+      <ul class="list-disc list-inside mt-4 text-gray-300 text-lg leading-relaxed">
+        <li class="mb-2">Upgraded school management system with PHP and SQL.</li>
+        <li class="mb-2">Participated in backend development and integration tasks.</li>
+        <li>Used Git for version control and collaborative workflow.</li>
+      </ul>
+    </div>
+
+    <div class="experience-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h4 class="text-2xl font-bold text-white">WordPress Developer <span class="text-gray-400">— Times Consultant (Pvt.) Ltd.</span></h4>
+      <p class="text-xl text-gray-400 mt-1 mb-4">📍 Hyderabad, Sindh, Pakistan | 🗓️ Jan 2017 – Feb 2017 (2 mos)</p>
+      <ul class="list-disc list-inside mt-4 text-gray-300 text-lg leading-relaxed">
+        <li class="mb-2">Customized WordPress themes and plugins for institutional websites.</li>
+        <li>Improved site loading times and user navigation experience.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="text-3xl font-bold text-[#00f5a0] mb-6 mt-12">🌱 Volunteering Experience</h3>
+
+  <div class="space-y-8">
+    <!-- Individual volunteering experience entries -->
+    <div class="experience-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h4 class="text-2xl font-bold text-white">Campus Ambassador <span class="text-gray-400">— Google Developer Student Clubs</span></h4>
+      <p class="text-xl text-gray-400 mt-1 mb-4">🗓️ Aug 2021 – Aug 2022 (1 yr 1 mo)</p>
+      <ul class="list-disc list-inside mt-4 text-gray-300 text-lg leading-relaxed">
+        <li class="mb-2">Organized workshops and tech events to foster peer learning.</li>
+        <li>Promoted Google technologies and campus engagement.</li>
+      </ul>
+    </div>
+
+    <div class="experience-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h4 class="text-2xl font-bold text-white">Web Lead <span class="text-gray-400">— Google Developer Student Clubs</span></h4>
+      <p class="text-xl text-gray-400 mt-1 mb-4">🗓️ Aug 2020 – Aug 2021 (1 yr 1 mo)</p>
+      <ul class="list-disc list-inside mt-4 text-gray-300 text-lg leading-relaxed">
+        <li class="mb-2">Led web development initiatives and team management.</li>
+        <li>Maintained the club’s digital presence and site functionality.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Education Section: Displays academic qualifications -->
+<section id="education" class="max-w-5xl mx-auto px-8 py-10 glow-border rounded-xl mb-12 bg-[#1c1c1c] shadow-2xl">
+  <h2 class="text-4xl font-bold border-b-4 border-[#00f5a0] pb-4 mb-8 text-white"><i class="fas fa-graduation-cap mr-4"></i> Education</h2>
+  <div class="space-y-8">
+    <!-- Individual education entries -->
+    <div class="education-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h3 class="text-2xl font-bold text-white">Mehran University of Engineering and Technology</h3>
+      <p class="text-xl text-gray-400 mt-1">Master of Science - MS, Cyber Security</p>
+      <p class="text-lg text-gray-500 mb-4">Feb 2025 – Feb 2027</p>
+    </div>
+
+    <div class="education-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h3 class="text-2xl font-bold text-white">Sindh Agricultural University</h3>
+      <p class="text-xl text-gray-400 mt-1">Bachelor's degree, Information Technology</p>
+      <p class="text-lg text-gray-500">Jan 2019 – Dec 2022 | Grade: First Division</p>
+    </div>
+
+    <div class="education-item p-8 rounded-lg bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h3 class="text-2xl font-bold text-white">Advanced Diploma In Software Engineering, Computer Software Engineering</h3>
+      <p class="text-xl text-gray-400 mt-1">APTECH Computer Education</p>
+      <p class="text-lg text-gray-500 mb-4">Dec 2013 – Nov 2016</p>
+    </div>
+  </div>
+</section>
+
+<!-- Combined Achievements Section: Lists certifications and badges -->
+<section id="achievements" class="max-w-5xl mx-auto px-8 py-10 glow-border rounded-xl mb-12 bg-[#1c1c1c] shadow-2xl">
+  <h2 class="text-4xl font-bold border-b-4 border-[#00f5a0] pb-4 mb-8 text-white"><i class="fas fa-trophy mr-4"></i> Achievements</h2>
+  
+  <h3 class="text-3xl font-bold text-[#00f5a0] mb-6 mt-8">🏆 Certifications</h3>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+    <!-- Individual certification entries -->
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://www.netacad.com/certificates?issuanceId=1cd402ed-530a-45fb-afe9-ecdb1f295eca" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Certified Ethical Hacker (CEH)</h3>
+        <p class="text-gray-400 text-lg mt-1">Issued by Cisco - <span class="text-[#38bdf8] cert-date">June 2025</span></p>
+      </a>
+    </div>
+
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://learn.microsoft.com/en-us/users/faiquehere/transcript/dg8xob664lzo010" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Microsoft Specialist: Implementing Azure Infrastructure Solutions</h3>
+        <p class="text-gray-400 text-lg mt-1">Issued by Microsoft - <span class="text-[#38bdf8] cert-date">December 2024</span></p>
+      </a>
+    </div>
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://learn.microsoft.com/en-us/users/faiquehere/transcript/dg8xob664lzo010" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Microsoft Certified Professional (MCP)</h3>
+        <p class="text-gray-400 text-lg mt-1">Issued by Microsoft - <span class="text-[#38bdf8] cert-date">December 2014</span></p>
+      </a>
+    </div>
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://learn.microsoft.com/en-us/users/faiquehere/transcript/dg8xob664lzo010" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Microsoft Certified Solutions Associate (MCSA): Office 365</h3>
+        <p class="text-gray-400 text-lg mt-1">Issued by Microsoft - <span class="text-[#38bdf8] cert-date">December 2014</span></p>
+      </a>
+    </div>
+
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://www.coursera.org/account/accomplishments/professional-cert/certificate/GRLLGRFUQ7RY" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Google Cybersecurity Certificate</h3>
+        <p class="text-gray-400 text-lg mt-1">Offered by Google - <span class="text-[#38bdf8] cert-date">June 2025</span></p>
+      </a>
+    </div>
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://ti-user-certificates.s3.amazonaws.com/e0df7fbf-a057-42af-8a1f-590912be5460/bbd427fa-110b-4d98-bcc1-d357e0bf7104-faique-ali-khan-6e35d9f2-74f8-458c-897f-b52a612818c3-certificate.pdf" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Introduction to Linux LFS101</h3>
+        <p class="text-gray-400 text-lg mt-1">By The Linux Foundation - <span class="text-[#38bdf8] cert-date">March 2025</span></p>
+      </a>
+    </div>
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://simpli-web.app.link/e/Wl4WHeoEKRb" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">ChatGPT for Cyber Security</h3>
+        <p class="text-gray-400 text-lg mt-1">From Simplilearn - <span class="text-[#38bdf8] cert-date">March 2025</span></p>
+      </a>
+    </div>
+
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-Q3QRI6MNH0.pdf" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Pre-Security Certificate</h3>
+        <p class="text-gray-400 text-lg mt-1">From TryHackMe - <span class="text-[#38bdf8] cert-date">June 2025</span></p>
+      </a>
+    </div>
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-DRBMQANDUA.pdf" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Cyber Security 101</h3>
+        <p class="text-gray-400 text-lg mt-1">From TryHackMe - <span class="text-[#38bdf8] cert-date">June 2025</span></p>
+      </a>
+    </div>
+
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/AKkAyEwWc8wjPxx9n/Hf4QMESoFeQwXPsiH_AKkAyEwWc8wjPxx9n_BSMZajXtkajtzKHs2_1748529434803_completion_certificate.pdf" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Cyber Security Management Job Simulation</h3>
+        <p class="text-gray-400 text-lg mt-1">From ANZ Australia (via Forage) - <span class="text-[#38bdf8] cert-date">May 2025</span></p>
+      </a>
+    </div>
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/gCW7Xki5Y3vNpBmnn/yTszJTvkHFBH6zAn3_gCW7Xki5Y3vNpBmnn_BSMZajXtkajtzKHs2_1748573056390_completion_certificate.pdf" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Cybersecurity Job Simulation</h3>
+        <p class="text-gray-400 text-lg mt-1">From Datacom (via Forage) - <span class="text-[#38bdf8] cert-date">May 2025</span></p>
+      </a>
+    </div>
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/mfxGwGDp6WkQmtmTf/vcKAB5yYAgvemepGQ_mfxGwGDp6WkQmtmTf_BSMZajXtkajtzKHs2_1748510719902_completion_certificate.pdf" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Cybersecurity Job Simulation</h3>
+        <p class="text-gray-400 text-lg mt-1">From Mastercard (via Forage) - <span class="text-[#38bdf8] cert-date">May 2025</span></p>
+      </a>
+    </div>
+
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://www.life-global.org/certificate/4569c2f7-1645-469f-a6e3-dbdd29e30e0b" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Agile Project Management</h3>
+        <p class="text-gray-400 text-lg mt-1">Issued by HP - <span class="text-[#38bdf8] cert-date">March 2025</span></p>
+      </a>
+    </div>
+    <div class="p-4 rounded-lg bg-[#2a2a2a] cyber-glow shadow-md">
+      <a href="https://www.life-global.org/certificate/663cd14d-74b1-4700-b448-be9f951b7f6d" target="_blank" class="cert-link">
+        <h3 class="text-xl font-bold text-[#00f5a0] cert-title">Social Media Marketing</h3>
+        <p class="text-gray-400 text-lg mt-1">Issued by HP - <span class="text-[#38bdf8] cert-date">March 2025</span></p>
+      </a>
+    </div>
+  </div>
+
+  <h3 class="text-3xl font-bold text-[#00f5a0] mb-6 mt-8">🏅 Badges</h3>
+  <div class="flex justify-center items-center mt-4">
+    <div class="w-full max-w-lg px-4 mx-auto">
+      <!-- TryHackMe Badge iframe: Displays the user's TryHackMe profile badge -->
+      <iframe src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4914344"
+              style="border:none; width:100%; height:160px; display:block; overflow:hidden; border-radius: 12px; box-shadow: 0 0 15px rgba(0, 245, 160, 0.4);"
+              loading="lazy" scrolling="no" title="TryHackMe Profile Badge">
+      </iframe>
+    </div>
+  </div>
+  <p class="mt-6 text-center text-lg text-gray-300">Explore my progress and achievements on various cybersecurity learning platforms.</p>
+</section>
+
+
+<!-- Projects Section: Showcases completed projects -->
+<section id="projects" class="max-w-5xl mx-auto px-8 py-10 glow-border rounded-xl mb-12 bg-[#1c1c1c] shadow-2xl">
+  <h2 class="text-4xl font-bold border-b-4 border-[#00f5a0] pb-4 mb-8 text-white"><i class="fas fa-laptop-code mr-4"></i> Projects</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-6">
+    <!-- Individual project items -->
+    <div class="project-item bg-[#2a2a2a] p-8 rounded-lg cyber-glow shadow-xl">
+      <h3 class="text-2xl font-bold text-[#00f5a0] mb-3">Web Exploitation Portal</h3>
+      <p class="mt-2 text-gray-300 text-lg" id="project1-desc">A custom-built web application designed to simulate common web vulnerabilities such as XSS, SQL Injection, and CSRF, complete with a login panel bypass challenge to hone penetration testing skills.</p>
+      <!-- Project tags -->
+      <div class="mt-5 flex flex-wrap gap-2">
+        <span class="bg-[#00f5a0] text-black text-sm font-semibold px-3 py-1 rounded-full">Web Security</span>
+        <span class="bg-[#00f5a0] text-black text-sm font-semibold px-3 py-1 rounded-full">Pen Testing</span>
+        <span class="bg-[#00f5a0] text-black text-sm font-semibold px-3 py-1 rounded-full">OWASP Top 10</span>
+      </div>
+    </div>
+    <div class="project-item bg-[#2a2a2a] p-8 rounded-lg cyber-glow shadow-xl">
+      <h3 class="text-2xl font-bold text-[#00f5a0] mb-3">Internal Network Scanner</h3>
+      <p class="mt-2 text-gray-300 text-lg" id="project2-desc">A robust Python-based tool leveraging Nmap to perform comprehensive network scans, mapping open ports, identifying service banners, and alerting on weak configurations or known vulnerabilities.</p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <span class="bg-[#00f5a0] text-black text-sm font-semibold px-3 py-1 rounded-full">Network Security</span>
+        <span class="bg-[#00f5a0] text-black text-sm font-semibold px-3 py-1 rounded-full">Nmap</span>
+        <span class="bg-[#00f5a0] text-black text-sm font-semibold px-3 py-1 rounded-full">Automation</span>
+      </div>
+    </div>
+    <div class="project-item bg-[#2a2a2a] p-8 rounded-lg cyber-glow shadow-xl">
+      <h3 class="text-2xl font-bold text-[#00f5a0] mb-3">Password Strength Meter</h3>
+      <p class="mt-2 text-gray-300 text-lg" id="project3-desc">A dynamic JavaScript-based utility that utilizes the zxcvbn library to provide real-time feedback on password entropy and strength, promoting stronger credential practices.</p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <span class="bg-[#00f5a0] text-black text-sm font-semibold px-3 py-1 rounded-full">Secure Coding</span>
+        <span class="bg-[#00f5a0] text-black text-sm font-semibold px-3 py-1 rounded-full">Client-Side Security</span>
+        <span class="bg-[#00f5a0] text-black text-sm font-semibold px-3 py-1 rounded-full">JavaScript</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Section: Features recent blog posts -->
+<section id="blog" class="max-w-5xl mx-auto px-8 py-10 glow-border rounded-xl mb-12 bg-[#1c1c1c] shadow-2xl">
+  <h2 class="text-4xl font-bold border-b-4 border-[#00f5a0] pb-4 mb-8 text-white"><i class="fas fa-blog mr-4"></i> My Blog</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-6">
+    <!-- Individual blog post previews -->
+    <div class="blog-post-item bg-[#2a2a2a] p-8 rounded-lg cyber-glow shadow-xl">
+      <h3 class="text-2xl font-bold text-[#00f5a0] mb-3">Understanding Zero-Day Exploits</h3>
+      <p class="mt-2 text-gray-300 text-lg">An in-depth look into zero-day vulnerabilities, their impact, and strategies for defense. Discover how to minimize your exposure to unknown threats.</p>
+      <a href="#" class="inline-block mt-4 text-[#38bdf8] hover:underline text-lg font-semibold">Read More <i class="fas fa-arrow-right ml-2"></i></a>
+    </div>
+    <div class="blog-post-item bg-[#2a2a2a] p-8 rounded-lg cyber-glow shadow-xl">
+      <h3 class="text-2xl font-bold text-[#00f5a0] mb-3">The Evolution of Phishing Attacks</h3>
+      <p class="mt-2 text-gray-300 text-lg">From simple email scams to sophisticated spear phishing, trace the history of phishing and learn advanced techniques to spot and avoid them.</p>
+      <a href="#" class="inline-block mt-4 text-[#38bdf8] hover:underline text-lg font-semibold">Read More <i class="fas fa-arrow-right ml-2"></i></a>
+    </div>
+    <div class="blog-post-item bg-[#2a2a2a] cyber-glow shadow-xl">
+      <h3 class="text-2xl font-bold text-[#00f5a0] mb-3">Securing IoT Devices in Your Home</h3>
+      <p class="mt-2 text-gray-300 text-lg">A practical guide to securing your smart home devices from common vulnerabilities. Protect your privacy and network from potential breaches.</p>
+      <a href="#" class="inline-block mt-4 text-[#38bdf8] hover:underline text-lg font-semibold">Read More <i class="fas fa-arrow-right ml-2"></i></a>
+    </div>
+  </div>
+  <!-- Button to view all blog posts -->
+  <div class="text-center mt-10">
+    <a href="#" class="bg-[#00f5a0] text-black font-extrabold px-6 py-3 rounded-full hover:bg-[#38bdf8] hover:text-white transition transform hover:scale-105 shadow-lg inline-flex items-center">
+      View All Posts <i class="fas fa-external-link-alt ml-3"></i>
+    </a>
+  </div>
+</section>
+
+<!-- Contact Section: Provides a contact form and social media links -->
+<section id="contact" class="max-w-5xl mx-auto px-8 py-10 glow-border rounded-xl mb-12 bg-[#1c1c1c] shadow-2xl">
+  <h2 class="text-4xl font-bold border-b-4 border-[#00f5a0] pb-4 mb-8 text-white"><i class="fas fa-envelope mr-4"></i> Get in Touch</h2>
+  <p class="text-xl text-gray-300 mb-8">Have a question, a potential collaboration, or just want to chat about cybersecurity? Feel free to reach out!</p>
+  
+  <!-- Contact Form, integrated with Formspree.io for submission handling -->
+  <form id="my-form" action="https://formspree.io/f/mldnapqj" method="POST" class="mt-4 grid gap-6">
+    <label for="name" class="text-lg text-gray-300 font-semibold mb-1">Name:</label>
+    <input type="text" id="name" name="name" required
+           class="p-4 rounded-lg bg-[#111827] text-[#00f5a0] border border-[#00f5a0] focus:ring-4 focus:ring-[#38bdf8] focus:border-transparent transition-all duration-300 placeholder-gray-500" />
+
+    <label for="email" class="text-lg text-gray-300 font-semibold mb-1">Email:</label>
+    <input type="email" id="email" name="email" required value="faiquealikk@gmail.com"
+           class="p-4 rounded-lg bg-[#111827] text-[#00f5a0] border border-[#00f5a0] focus:ring-4 focus:ring-[#38bdf8] focus:border-transparent transition-all duration-300 placeholder-gray-500" />
+    
+    <label for="message" class="text-lg text-gray-300 font-semibold mb-1">Message:</label>
+    <textarea id="message" name="message" rows="7" required
+              class="p-4 rounded-lg bg-[#111827] text-[#00f5a0] border border-[#00f5a0] focus:ring-4 focus:ring-[#38bdf8] focus:border-transparent transition-all duration-300 placeholder-gray-500"></textarea>
+    
+    <!-- Submit button for the form -->
+    <button type="submit" id="my-form-button"
+            class="bg-[#00f5a0] text-black text-xl font-extrabold px-8 py-4 rounded-full hover:bg-[#38bdf8] hover:text-white transition transform hover:scale-105 shadow-xl flex items-center justify-center mx-auto w-full max-w-sm">
+      <i class="fas fa-paper-plane mr-3"></i> Send Message
+    </button>
+    <!-- Status message for form submission (success/error) -->
+    <p id="my-form-status" class="text-center mt-4 text-lg font-semibold"></p>
+  </form>
+
+  <!-- Social media links -->
+  <div class="mt-12 text-center">
+    <p class="text-xl text-gray-300 mb-5">Connect with me on social media:</p>
+    <div class="flex justify-center gap-8 mt-4 text-4xl">
+      <a href="https://linkedin.com/in/faiquehere" target="_blank" class="text-[#00f5a0] hover:text-[#38bdf8] transition transform hover:scale-125 hover:shadow-lg" aria-label="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>
+      <a href="https://github.com/faiquehere" target="_blank" class="text-[#00f5a0] hover:text-[#38bdf8] transition transform hover:scale-125 hover:shadow-lg" aria-label="GitHub Profile"><i class="fab fa-github"></i></a>
+      <a href="https://twitter.com/faiquehere" target="_blank" class="text-[#00f5a0] hover:text-[#38bdf8] transition transform hover:scale-125 hover:shadow-lg" aria-label="Twitter Profile"><i class="fab fa-twitter"></i></a>
+      <a href="mailto:faiquealikk@gmail.com" class="text-[#00f5a0] hover:text-[#38bdf8] transition transform hover:scale-125 hover:shadow-lg" aria-label="Email Address"><i class="fas fa-at"></i></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- Footer Section: Contains copyright and credit information -->
+<footer class="text-center py-10 border-t-2 border-slate-700 mt-12 text-gray-400 bg-[#121212]">
+  <p>&copy; 2025 Faique Ali Khan – Cybersecurity Portfolio. All rights reserved.</p>
+</footer>
+
+<!-- JavaScript for dynamic functionalities -->
+<script>
+  // Particles.js configuration: Initializes the interactive background animation
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 100, density: { enable: true, value_area: 1200 } }, // More particles, larger density area
+      color: { value: "#00f5a0" }, // Neon green particles
+      shape: { type: "circle" }, // Circular particles
+      opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } }, // Random opacity with animation
+      size: { value: 4, random: true, anim: { enable: true, speed: 20, size_min: 0.1, sync: false } }, // Random size with animation
+      line_linked: { enable: true, distance: 160, color: "#00f5a0", opacity: 0.5, width: 1.5 }, // Stronger lines
+      move: { enable: true, speed: 3, direction: "none", random: true, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } }
+    },
+    interactivity: {
+      events: {
+        onhover: { enable: true, mode: "grab" }, // Grab effect on hover
+        onclick: { enable: true, mode: "push" }, // Push effect on click
+        resize: true
+      },
+      modes: {
+        grab: { distance: 180, line_linked: { opacity: 1 } }, // Increase grab distance
+        push: { particles_nb: 4 },
+        repulse: { distance: 150, duration: 0.4 } // Repulse mode for future use if needed
+      }
+    },
+    retina_detect: true
+  });
+
+  // Typing animation for the role text in the header
+  const roles = [
+    "Cybersecurity Analyst | Digital Strategist",
+    "IT Operations Specialist",
+    "Web Systems Expert",
+    "Penetration Tester",
+    "Incident Responder"
+  ];
+  let roleIndex = 0;
+  let charIndex = 0;
+  const roleElement = document.getElementById("role");
+  const typingSpeed = 100; // Speed of typing (milliseconds per character)
+  const erasingSpeed = 50; // Speed of erasing
+  const newRoleDelay = 2000; // Delay before typing new role
+
+  // Function to type out a role character by character
+  function typeRole() {
+    if (charIndex < roles[roleIndex].length) {
+      roleElement.textContent += roles[roleIndex].charAt(charIndex);
+      charIndex++;
+      setTimeout(typeRole, typingSpeed);
+    } else {
+      // Once typing is complete, wait and then start erasing
+      setTimeout(eraseRole, newRoleDelay);
+    }
+  }
+
+  // Function to erase a role character by character
+  function eraseRole() {
+    if (charIndex > 0) {
+      roleElement.textContent = roles[roleIndex].substring(0, charIndex - 1);
+      charIndex--;
+      setTimeout(eraseRole, erasingSpeed);
+    } else {
+      // Move to the next role in the array
+      roleIndex = (roleIndex + 1) % roles.length;
+      // Start typing the new role after a brief delay
+      setTimeout(typeRole, 500);
+    }
+  }
+
+  // Mobile menu toggle functionality: Toggles visibility and styling for the navigation on small screens
+  const menuToggle = document.getElementById('menu-toggle');
+  const navLinks = document.getElementById('nav-links');
+
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('hidden');
+    navLinks.classList.toggle('mobile-menu-open'); // Ensure mobile-menu-open is toggled correctly
+  });
+
+  // Event listener for when the DOM content is fully loaded
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(typeRole, 1000); // Initial delay before starting to type
+
+    // Initial check for mobile menu state: if on a small screen, remove 'hidden' and apply 'mobile-menu-open'
+    if (window.innerWidth < 1024) { // Tailwind's 'lg' breakpoint
+      navLinks.classList.remove('hidden');
+      navLinks.classList.add('mobile-menu-open');
+    }
+  });
+
+  // Formspree.io JavaScript: Handles contact form submission asynchronously
+  var form = document.getElementById("my-form");
+  async function handleSubmit(event) {
+    event.preventDefault(); // Prevent default form submission
+    var status = document.getElementById("my-form-status"); // Get status message element
+    var data = new FormData(event.target); // Get form data
+    fetch(event.target.action, { // Send form data to Formspree
+      method: form.method,
+      body: data,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) { // If submission is successful
+        status.innerHTML = "Thanks for your submission!";
+        status.classList.remove('text-red-500'); // Remove error styling
+        status.classList.add('text-[#00f5a0]'); // Add success styling
+        form.reset(); // Clear the form
+      } else { // If there's an error in submission
+        response.json().then(data => {
+          if (Object.hasOwn(data, 'errors')) { // Display specific Formspree errors
+            status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+          } else { // Generic error message
+            status.innerHTML = "Oops! There was a problem submitting your form";
+          }
+          status.classList.remove('text-[#00f5a0]'); // Remove success styling
+          status.classList.add('text-red-500'); // Add error styling
+        });
+      }
+    }).catch(error => { // Catch network or other fetch errors
+      status.innerHTML = "Oops! There was a problem submitting your form";
+      status.classList.remove('text-[#00f5a0]'); // Remove success styling
+      status.classList.add('text-red-500'); // Add error styling
+    });
+  }
+  form.addEventListener("submit", handleSubmit); // Attach the submit handler to the form
+</script>
+</body>
+</html>
